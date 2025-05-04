@@ -4,158 +4,93 @@
   <meta charset="UTF-8">
   <title>Editar Portafolio</title>
   <style>
-    ul {
-      list-style: none;
-      padding: 0;
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
-    li {
-      margin: 5px 0;
-      padding: 8px;
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    .portafolio-item {
       background: #f0f0f0;
-      cursor: move;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <h2>Editar Portafolio</h2>
 
-  <!-- Subir trabajo (C5) -->
-  <h3>Agregar nuevo trabajo</h3>
-  <form id="formSubirTrabajo">
-    <input type="file" id="archivo" accept=".jpg,.png,.pdf,.mp4" required>
-    <button type="submit">Subir trabajo</button>
-    <p id="mensajeSubida"></p>
+  <h3>Agregar nuevo elemento</h3>
+  <form id="formAgregar">
+    <input type="text" id="titulo" placeholder="Título" required>
+    <input type="text" id="descripcion" placeholder="Descripción">
+    <input type="text" id="imagen" placeholder="URL de imagen">
+    <input type="text" id="categoria" placeholder="Categoría">
+    <button type="submit">Guardar</button>
   </form>
 
-  <!-- Botón para organizar automáticamente por fecha -->
-  <button id="organizarAutomaticamente">Organizar automáticamente por fecha</button>
-
-  <!-- Lista de trabajos -->
-  <h3>Trabajos en el portafolio</h3>
-  <ul id="listaTrabajos">
-    <!-- Trabajos aparecerán aquí -->
-  </ul>
-
-  <!-- Botón para guardar organización -->
-  <button id="guardarOrden">Guardar organización</button>
-  <p id="mensajeOrden"></p>
+  <h3>Elementos en el portafolio</h3>
+  <div id="listaPortafolio"></div>
 
   <script>
-    const form = document.getElementById('formSubirTrabajo');
-    const archivoInput = document.getElementById('archivo');
-    const mensajeSubida = document.getElementById('mensajeSubida');
-    const lista = document.getElementById('listaTrabajos');
-    const botonGuardar = document.getElementById('guardarOrden');
-    const mensajeOrden = document.getElementById('mensajeOrden');
-    const botonOrganizar = document.getElementById('organizarAutomaticamente');
+    const lista = document.getElementById('listaPortafolio');
+    const form = document.getElementById('formAgregar');
 
-    let trabajos = [];
+    // Cargar elementos al iniciar
+    window.addEventListener('DOMContentLoaded', cargarPortafolio);
 
-    // Subir trabajo
-    form.addEventListener('submit', function(e) {
+    async function cargarPortafolio() {
+      lista.innerHTML = 'Cargando...';
+      try {
+        const res = await fetch('/api/portafolios');
+        const datos = await res.json();
+        lista.innerHTML = '';
+
+        datos.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'portafolio-item';
+          div.innerHTML = `
+            <strong>${item.titulo}</strong><br>
+            <em>${item.categoria || 'Sin categoría'}</em><br>
+            <p>${item.descripcion || ''}</p>
+            ${item.imagen ? `<img src="${item.imagen}" alt="" width="100">` : ''}
+            <small>Creado el: ${new Date(item.fecha_creacion).toLocaleString()}</small>
+          `;
+          lista.appendChild(div);
+        });
+      } catch (error) {
+        lista.innerHTML = 'Error al cargar el portafolio.';
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const archivo = archivoInput.files[0];
-
-      if (!archivo) return;
-
-      // Tipos de archivo válidos: solo .jpg, .png, .pdf, .mp4
-      const tiposValidos = ['image/jpeg', 'image/png', 'application/pdf', 'video/mp4'];
-      // Tipos de archivo no permitidos: .rar, .mp3, .zip
-      const tiposNoPermitidos = ['application/x-rar-compressed', 'audio/mp3', 'application/zip'];
-
-      if (tiposNoPermitidos.includes(archivo.type)) {
-        mensajeSubida.style.color = 'red';
-        mensajeSubida.textContent = 'Archivo no válido. Solo se permiten .jpg, .png, .pdf y .mp4';
-        return;
-      }
-
-      if (!tiposValidos.includes(archivo.type)) {
-        mensajeSubida.style.color = 'red';
-        mensajeSubida.textContent = 'Archivo no permitido. Solo formatos .jpg, .png, .pdf y .mp4 son válidos';
-        return;
-      }
-
-      const nuevoTrabajo = {
-        nombre: archivo.name,
-        fecha: new Date().toISOString()
+      const nuevo = {
+        titulo: document.getElementById('titulo').value,
+        descripcion: document.getElementById('descripcion').value,
+        imagen: document.getElementById('imagen').value,
+        categoria: document.getElementById('categoria').value
       };
-      trabajos.push(nuevoTrabajo);
-      renderLista();
-      mensajeSubida.style.color = 'green';
-      mensajeSubida.textContent = 'Trabajo añadido';
-      archivoInput.value = '';
-    });
 
-    // Renderizar lista
-    function renderLista() {
-      lista.innerHTML = '';
-      trabajos.forEach((trabajo, index) => {
-        const li = document.createElement('li');
-        li.draggable = true;
-        li.textContent = ${trabajo.nombre} (Fecha: ${new Date(trabajo.fecha).toLocaleString()});
-        li.dataset.index = index;
-        lista.appendChild(li);
-      });
-      aplicarDragDrop();
-    }
-
-    // Reordenar por drag & drop
-    function aplicarDragDrop() {
-      let draggedItem = null;
-
-      lista.querySelectorAll('li').forEach(item => {
-        item.addEventListener('dragstart', () => {
-          draggedItem = item;
+      try {
+        const res = await fetch('/api/portafolios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(nuevo)
         });
 
-        item.addEventListener('dragover', (e) => {
-          e.preventDefault();
-        });
-
-        item.addEventListener('drop', () => {
-          if (draggedItem !== item) {
-            const from = parseInt(draggedItem.dataset.index);
-            const to = parseInt(item.dataset.index);
-            const temp = trabajos[from];
-            trabajos.splice(from, 1);
-            trabajos.splice(to, 0, temp);
-            renderLista();
-          }
-        });
-      });
-    }
-
-    // Organizar automáticamente por fecha
-    botonOrganizar.addEventListener('click', () => {
-      if (trabajos.length > 1) {
-        trabajos.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-        renderLista();
-        mensajeOrden.style.color = 'green';
-        mensajeOrden.textContent = 'Orden aplicado (por fecha)';
-      } else {
-        mensajeOrden.style.color = 'red';
-        mensajeOrden.textContent = 'No hay suficientes trabajos para organizar';
-      }
-    });
-
-    // Guardar organización
-    botonGuardar.addEventListener('click', () => {
-      if (trabajos.length === 0) {
-        mensajeOrden.style.color = 'red';
-        mensajeOrden.textContent = 'Error al guardar los cambios';
-        return;
-      }
-
-      // Verificar si realmente se ha cambiado el orden
-      const listaOriginal = trabajos.slice();
-      const trabajosOrdenados = [...trabajos].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
-      if (JSON.stringify(listaOriginal) !== JSON.stringify(trabajosOrdenados)) {
-        mensajeOrden.style.color = 'green';
-        mensajeOrden.textContent = 'Cambios aplicados correctamente';
-      } else {
-        mensajeOrden.style.color = 'red';
-        mensajeOrden.textContent = 'Error al guardar los cambios';
+        if (res.ok) {
+          form.reset();
+          cargarPortafolio();
+        } else {
+          alert('Error al guardar.');
+        }
+      } catch (err) {
+        alert('Error de red.');
       }
     });
   </script>
