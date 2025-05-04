@@ -92,7 +92,7 @@
       trabajos.forEach((trabajo, index) => {
         const li = document.createElement('li');
         li.draggable = true;
-        li.textContent = `${trabajo.nombre} (Fecha: ${new Date(trabajo.fecha).toLocaleString()})`;
+        li.textContent = ${trabajo.nombre} (Fecha: ${new Date(trabajo.fecha).toLocaleString()});
         li.dataset.index = index;
         lista.appendChild(li);
       });
