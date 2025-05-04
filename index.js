@@ -15,9 +15,10 @@ app.get('/', (req, res) => {
   res.send('Servidor funcionando');
 });
 
-// Crear tabla si no existe
-async function crearTablaSiNoExiste() {
+// Crear tablas si no existen
+async function crearTablasSiNoExisten() {
   try {
+    // Crear tabla portafolio_db
     await db.query(`
       CREATE TABLE IF NOT EXISTS portafolio_db (
         id SERIAL PRIMARY KEY,
@@ -27,14 +28,35 @@ async function crearTablaSiNoExiste() {
       );
     `);
     console.log('Tabla portafolio_db verificada o creada correctamente.');
+
+    // Crear tabla trabajos
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS trabajos (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        portafolio_id UUID REFERENCES portafolio_db(id),
+        nombre TEXT,
+        url_archivo TEXT,
+        tipo TEXT,
+        fecha_subida TIMESTAMP DEFAULT NOW(),
+        orden INT DEFAULT 0
+      );
+    `);
+    console.log('Tabla trabajos verificada o creada correctamente.');
+
+    // Habilitar extensión pgcrypto si no está habilitada
+    await db.query(`
+      CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+    `);
+    console.log('Extensión pgcrypto habilitada correctamente.');
+    
   } catch (error) {
-    console.error('Error al crear/verificar la tabla:', error);
+    console.error('Error al crear/verificar las tablas o habilitar la extensión:', error);
     process.exit(1); // Cierra el servidor si falla
   }
 }
 
-// Iniciar el servidor después de crear/verificar la tabla
-crearTablaSiNoExiste().then(() => {
+// Iniciar el servidor después de crear/verificar las tablas
+crearTablasSiNoExisten().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
   });
