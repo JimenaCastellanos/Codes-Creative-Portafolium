@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Portafolio</title>
+</head>
+<body>
+  <h2>Crear nuevo portafolio</h2>
+
+  <form id="crearPortafolioForm">
+    <label for="nombre">Nombre del portafolio:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br>
+    <span id="nombreError" style="color:red;"></span><br>
+
+    <label for="descripcion">Descripción (máx. 150 caracteres):</label><br>
+    <textarea id="descripcion" name="descripcion" maxlength="150" required></textarea><br>
+    <span id="descripcionContador">0 / 150</span><br>
+    <span id="descripcionError" style="color:red;"></span><br><br>
+
+    <button type="submit">Crear</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <script>
+    const form = document.getElementById('crearPortafolioForm');
+    const nombreInput = document.getElementById('nombre');
+    const descripcionInput = document.getElementById('descripcion');
+    const nombreError = document.getElementById('nombreError');
+    const descripcionError = document.getElementById('descripcionError');
+    const descripcionContador = document.getElementById('descripcionContador');
+    const mensaje = document.getElementById('mensaje');
+
+    // Actualiza el contador de caracteres en tiempo real
+    descripcionInput.addEventListener('input', () => {
+      const length = descripcionInput.value.length;
+      descripcionContador.textContent = `${length} / 150`;
+      if (length > 150) {
+        descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
+      } else {
+        descripcionError.textContent = '';
+      }
+    });
+
+    // Validación en tiempo real para el nombre
+    nombreInput.addEventListener('input', () => {
+      if (nombreInput.value.trim() === '') {
+        nombreError.textContent = 'El nombre no puede estar vacío.';
+      } else {
+        nombreError.textContent = '';
+      }
+    });
+
+    // Validación al enviar
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nombre = nombreInput.value.trim();
+      const descripcion = descripcionInput.value.trim();
+
+      let valido = true;
+
+      if (!nombre) {
+        nombreError.textContent = 'El nombre no puede estar vacío.';
+        valido = false;
+      }
+
+      if (descripcion.length > 150) {
+        descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
+        valido = false;
+      }
+
+      if (!valido) {
+        mensaje.style.color = 'red';
+        mensaje.textContent = 'Asegúrese de que los datos han sido llenados correctamente.';
+        return;
+      }
+
+      mensaje.style.color = 'green';
+      mensaje.textContent = '¡Portafolio creado!';
+      form.reset();
+      descripcionContador.textContent = '0 / 150';
+      nombreError.textContent = '';
+      descripcionError.textContent = '';
+    });
+
+    // Enviar datos al backend con fetch
+    fetch('/api/portafolios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, descripcion })
+    })
+    .then(res => res.json())
+    .then(data => {
+      mensaje.style.color = 'green';
+      mensaje.textContent = '¡Portafolio creado en la base de datos!';
+      form.reset();
+      descripcionContador.textContent = '0 / 150';
+    })
+    .catch(err => {
+      mensaje.style.color = 'red';
+      mensaje.textContent = 'Error al guardar en la base de datos';
+    });
+  </script>
+</body>
+</html>

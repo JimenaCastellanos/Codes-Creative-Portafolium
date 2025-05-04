@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuración de Diseño y Categorías</title>
+  <style>
+    .configuracion-diseño {
+      margin-top: 20px;
+    }
+
+    .categorias {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Configuración del Portafolio</h2>
+
+  <!-- Configuración de Diseño del Portafolio (C7) -->
+  <div class="configuracion-diseño">
+    <h3>Configuración de Diseño del Portafolio</h3>
+    <label for="colorFuente">Selecciona color de fuente:</label>
+    <input type="color" id="colorFuente" value="#000000">
+    <br>
+    <label for="fuente">Selecciona fuente:</label>
+    <select id="fuente">
+      <option value="Arial">Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Courier New">Courier New</option>
+    </select>
+    <br>
+    <button id="guardarDiseño">Guardar Diseño</button>
+    <p id="mensajeDiseño"></p>
+  </div>
+
+  <!-- Gestión de Categorías (C8) -->
+  <div class="categorias">
+    <h3>Gestionar Categorías</h3>
+    
+    <!-- Crear categoría -->
+    <label for="nuevaCategoria">Crear nueva categoría:</label>
+    <input type="text" id="nuevaCategoria">
+    <button id="crearCategoria">Crear Categoría</button>
+    <p id="mensajeCategoria"></p>
+
+    <!-- Asignar trabajo a categoría -->
+    <h4>Asignar trabajo a categoría</h4>
+    <label for="trabajoACategoría">Trabajo:</label>
+    <input type="text" id="trabajoACategoría">
+    <label for="categoriaAsignada">Categoría:</label>
+    <input type="text" id="categoriaAsignada">
+    <button id="asignarCategoria">Asignar</button>
+    <p id="mensajeAsignación"></p>
+
+    <!-- Mover trabajo entre categorías -->
+    <h4>Mover trabajo entre categorías</h4>
+    <label for="trabajoMover">Trabajo:</label>
+    <input type="text" id="trabajoMover">
+    <label for="nuevaCategoriaMover">Nueva categoría:</label>
+    <input type="text" id="nuevaCategoriaMover">
+    <button id="moverTrabajo">Mover trabajo</button>
+    <p id="mensajeMover"></p>
+  </div>
+
+  <script>
+    // Cambiar diseño (C7)
+    const colorFuenteInput = document.getElementById('colorFuente');
+    const fuenteSelect = document.getElementById('fuente');
+    const botonGuardarDiseño = document.getElementById('guardarDiseño');
+    const mensajeDiseño = document.getElementById('mensajeDiseño');
+
+    botonGuardarDiseño.addEventListener('click', () => {
+      document.body.style.color = colorFuenteInput.value;
+      document.body.style.fontFamily = fuenteSelect.value;
+      mensajeDiseño.style.color = 'green';
+      mensajeDiseño.textContent = 'Diseño guardado correctamente';
+    });
+
+    // Gestión de Categorías (C8)
+    const categoriaInput = document.getElementById('nuevaCategoria');
+    const botonCrearCategoria = document.getElementById('crearCategoria');
+    const mensajeCategoria = document.getElementById('mensajeCategoria');
+
+    const trabajoACategoríaInput = document.getElementById('trabajoACategoría');
+    const categoriaAsignadaInput = document.getElementById('categoriaAsignada');
+    const botonAsignarCategoria = document.getElementById('asignarCategoria');
+    const mensajeAsignación = document.getElementById('mensajeAsignación');
+
+    const trabajoMoverInput = document.getElementById('trabajoMover');
+    const nuevaCategoriaMoverInput = document.getElementById('nuevaCategoriaMover');
+    const botonMoverTrabajo = document.getElementById('moverTrabajo');
+    const mensajeMover = document.getElementById('mensajeMover');
+
+    let categorias = {};
+
+    // Crear categoría
+    botonCrearCategoria.addEventListener('click', () => {
+      const nombreCategoria = categoriaInput.value.trim();
+      if (!nombreCategoria) {
+        mensajeCategoria.style.color = 'red';
+        mensajeCategoria.textContent = 'Nombre de categoría vacío';
+        return;
+      }
+      if (!categorias[nombreCategoria]) {
+        categorias[nombreCategoria] = [];
+        mensajeCategoria.style.color = 'green';
+        mensajeCategoria.textContent = 'Categoría creada correctamente';
+      } else {
+        mensajeCategoria.style.color = 'red';
+        mensajeCategoria.textContent = 'La categoría ya existe';
+      }
+    });
+
+    // Asignar trabajo a categoría
+    botonAsignarCategoria.addEventListener('click', () => {
+      const trabajoNombre = trabajoACategoríaInput.value.trim();
+      const categoriaNombre = categoriaAsignadaInput.value.trim();
+      if (!trabajoNombre || !categoriaNombre) {
+        mensajeAsignación.style.color = 'red';
+        mensajeAsignación.textContent = 'Por favor, ingrese un trabajo y una categoría';
+        return;
+      }
+      if (!categorias[categoriaNombre]) {
+        mensajeAsignación.style.color = 'red';
+        mensajeAsignación.textContent = 'Categoría no encontrada';
+        return;
+      }
+      categorias[categoriaNombre].push(trabajoNombre);
+      mensajeAsignación.style.color = 'green';
+      mensajeAsignación.textContent = `Trabajo ${trabajoNombre} asignado a la categoría ${categoriaNombre}`;
+    });
+
+    // Mover trabajo entre categorías
+    botonMoverTrabajo.addEventListener('click', () => {
+      const trabajoNombre = trabajoMoverInput.value.trim();
+      const nuevaCategoria = nuevaCategoriaMoverInput.value.trim();
+      if (!trabajoNombre || !nuevaCategoria) {
+        mensajeMover.style.color = 'red';
+        mensajeMover.textContent = 'Por favor, ingresa trabajo y nueva categoría';
+        return;
+      }
+      if (!categorias[nuevaCategoria]) {
+        mensajeMover.style.color = 'red';
+        mensajeMover.textContent = 'Categoría no válida';
+        return;
+      }
+      // Mover el trabajo
+      for (const categoria in categorias) {
+        const index = categorias[categoria].indexOf(trabajoNombre);
+        if (index !== -1) {
+          categorias[categoria].splice(index, 1);
+        }
+      }
+      categorias[nuevaCategoria].push(trabajoNombre);
+      mensajeMover.style.color = 'green';
+      mensajeMover.textContent = `Trabajo ${trabajoNombre} movido a la categoría ${nuevaCategoria}`;
+    });
+  </script>
+</body>
+</html>
