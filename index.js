@@ -1,41 +1,52 @@
-const express = require('express');
-const app = express();
-const db = require('./db');
-const rutas = require('./routes');
-const PORT = process.env.PORT || 3000;
+const express = require("express");
+const { Pool } = require("pg");
+const cors = require("cors");
 
-// Middleware para parsear JSON
+const app = express();
+const port = process.env.PORT || 10000;
+
+app.use(cors());
 app.use(express.json());
 
-// Usar las rutas
-app.use(rutas);
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('Servidor funcionando');
+// Configuración de la base de datos
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Para Render
+  },
 });
 
 // Crear tabla si no existe
-async function crearTablaSiNoExiste() {
+async function crearTablasSiNoExisten() {
   try {
-    await db.query(
+    await db.query(`
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
       CREATE TABLE IF NOT EXISTS portafolio_db (
-        id SERIAL PRIMARY KEY,
-        nombre VARCHAR(100) NOT NULL,
-        descripcion VARCHAR(150),
-        fecha TIMESTAMP DEFAULT NOW()
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        titulo TEXT NOT NULL,
+        descripcion TEXT,
+        imagen TEXT,
+        categoria TEXT,
+        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-    );
-    console.log('Tabla portafolio_db verificada o creada correctamente.');
+    `);
+
+    console.log("Tabla portafolio_db verificada o creada correctamente.");
   } catch (error) {
-    console.error('Error al crear/verificar la tabla:', error);
-    process.exit(1); // Cierra el servidor si falla
+    console.error("Error al crear/verificar las tablas o habilitar la extensión:", error);
   }
 }
 
-// Iniciar el servidor después de crear/verificar la tabla
-crearTablaSiNoExiste().then(() => {
-  app.listen(PORT, () => {
-    console.log(Servidor escuchando en el puerto ${PORT});
-  });
+// Llamar a la función al iniciar el servidor
+crearTablasSiNoExisten();
+
+// Ruta de prueba
+app.get("/", (req, res) => {
+  res.send("Servidor corriendo correctamente 🎉");
+});
+
+// Iniciar servidor
+app.listen(port, () => {
+  console.log(`Servidor escuchando en el puerto ${port}`);
 });
