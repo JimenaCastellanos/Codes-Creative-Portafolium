@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Editar Portafolio</title>
+  <title>Editar Portafolio con Categorías</title>
   <link rel="stylesheet" href="estilo c5 y c6.css">
 </head>
 <body>
   <div class="contenedor">
     <h2>Editar Portafolio</h2>
-    <br>
+
+    <!-- Subir trabajo -->
     <h3>Agregar nuevo trabajo</h3>
     <form id="formSubirTrabajo">
       <input type="file" id="archivo" accept=".jpg,.png,.pdf,.mp4" required>
@@ -16,14 +17,47 @@
       <p id="mensajeSubida"></p>
     </form>
 
+    <!-- Lista de trabajos -->
     <h3>Trabajos en el portafolio</h3>
     <ul id="listaTrabajos"></ul>
 
     <div class="botones-acciones">
       <button id="organizarAutomaticamente">Organizar automáticamente por fecha</button>
       <button id="guardarOrden">Guardar organización</button>
+      <p id="mensajeOrden"></p>
     </div>
-    <p id="mensajeOrden"></p>
+    <hr style="margin: 40px 0; border-top: 2px solid #ccc;">
+    <h3>Categorias y Trabajos</h3>
+    <div class="gestion-categorias">
+
+      <div class="seccion-categoria">
+        <h3>Crear Categoría</h3>
+        <label for="nueva-categoria">Nueva categoría:</label>
+        <input type="text" id="nueva-categoria" name="categoria">
+        <button id="crearCategoria">Crear Categoría</button>
+        <p id="mensajeCategoria"></p>
+      </div>
+    
+      <div class="seccion-categoria">
+        <h3>Asignar trabajo</h3>
+        <label for="trabajo-asignar">Trabajo:</label>
+        <select id="trabajo-asignar"></select>
+        <label for="categoria-asignar">Categoría:</label>
+        <select id="categoria-asignar"></select>
+        <button id="asignarCategoria">Asignar</button>
+        <p id="mensajeAsignación"></p>
+      </div>
+    
+      <div class="seccion-categoria">
+        <h3>Mover trabajo</h3>
+        <label for="trabajo-mover">Trabajo:</label>
+        <select id="trabajo-mover"></select>
+        <label for="categoria-mover">Nueva categoría:</label>
+        <select id="categoria-mover"></select>
+        <button id="moverTrabajo">Mover trabajo</button>
+        <p id="mensajeMover"></p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -35,27 +69,61 @@
     const mensajeOrden = document.getElementById('mensajeOrden');
     const botonOrganizar = document.getElementById('organizarAutomaticamente');
 
+    const categoriaInput = document.getElementById('nueva-categoria');
+    const botonCrearCategoria = document.getElementById('crearCategoria');
+    const mensajeCategoria = document.getElementById('mensajeCategoria');
+
+    const trabajoACategoríaSelect = document.getElementById('trabajo-asignar');
+    const categoriaAsignadaSelect = document.getElementById('categoria-asignar');
+    const botonAsignarCategoria = document.getElementById('asignarCategoria');
+    const mensajeAsignación = document.getElementById('mensajeAsignación');
+
+    const trabajoMoverSelect = document.getElementById('trabajo-mover');
+    const nuevaCategoriaMoverSelect = document.getElementById('categoria-mover');
+    const botonMoverTrabajo = document.getElementById('moverTrabajo');
+    const mensajeMover = document.getElementById('mensajeMover');
+
     let trabajos = [];
+    let categorias = {};
+
+    // Función para actualizar select de trabajos
+    function actualizarSelectTrabajos() {
+      [trabajoACategoríaSelect, trabajoMoverSelect].forEach(select => {
+        select.innerHTML = '';
+        trabajos.forEach(trabajo => {
+          const option = document.createElement('option');
+          option.value = trabajo.nombre;
+          option.textContent = trabajo.nombre;
+          select.appendChild(option);
+        });
+      });
+    }
+
+    // Función para actualizar select de categorías
+    function actualizarSelectCategorias() {
+      [categoriaAsignadaSelect, nuevaCategoriaMoverSelect].forEach(select => {
+        select.innerHTML = '';
+        Object.keys(categorias).forEach(categoria => {
+          const option = document.createElement('option');
+          option.value = categoria;
+          option.textContent = categoria;
+          select.appendChild(option);
+        });
+      });
+    }
 
     // Subir trabajo
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       const archivo = archivoInput.files[0];
-
       if (!archivo) return;
 
       const tiposValidos = ['image/jpeg', 'image/png', 'application/pdf', 'video/mp4'];
       const tiposNoPermitidos = ['application/x-rar-compressed', 'audio/mp3', 'application/zip'];
 
-      if (tiposNoPermitidos.includes(archivo.type)) {
+      if (tiposNoPermitidos.includes(archivo.type) || !tiposValidos.includes(archivo.type)) {
         mensajeSubida.style.color = 'red';
         mensajeSubida.textContent = 'Archivo no válido. Solo se permiten .jpg, .png, .pdf y .mp4';
-        return;
-      }
-
-      if (!tiposValidos.includes(archivo.type)) {
-        mensajeSubida.style.color = 'red';
-        mensajeSubida.textContent = 'Archivo no permitido. Solo formatos .jpg, .png, .pdf y .mp4 son válidos';
         return;
       }
 
@@ -65,12 +133,12 @@
       };
       trabajos.push(nuevoTrabajo);
       renderLista();
+      actualizarSelectTrabajos();
       mensajeSubida.style.color = 'green';
       mensajeSubida.textContent = 'Trabajo añadido';
       archivoInput.value = '';
     });
 
-    // Renderizar lista
     function renderLista() {
       lista.innerHTML = '';
       trabajos.forEach((trabajo, index) => {
@@ -83,19 +151,11 @@
       aplicarDragDrop();
     }
 
-    // Reordenar por drag & drop
     function aplicarDragDrop() {
       let draggedItem = null;
-
       lista.querySelectorAll('li').forEach(item => {
-        item.addEventListener('dragstart', () => {
-          draggedItem = item;
-        });
-
-        item.addEventListener('dragover', (e) => {
-          e.preventDefault();
-        });
-
+        item.addEventListener('dragstart', () => { draggedItem = item; });
+        item.addEventListener('dragover', (e) => e.preventDefault());
         item.addEventListener('drop', () => {
           if (draggedItem !== item) {
             const from = parseInt(draggedItem.dataset.index);
@@ -109,7 +169,6 @@
       });
     }
 
-    // Organizar automáticamente por fecha
     botonOrganizar.addEventListener('click', () => {
       if (trabajos.length > 1) {
         trabajos.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
@@ -122,27 +181,80 @@
       }
     });
 
-    // Guardar organización
     botonGuardar.addEventListener('click', () => {
       if (trabajos.length === 0) {
         mensajeOrden.style.color = 'red';
         mensajeOrden.textContent = 'Error al guardar los cambios';
         return;
       }
+      mensajeOrden.style.color = 'green';
+      mensajeOrden.textContent = 'Cambios aplicados correctamente';
+    });
 
-      // Verificar 
-      const listaOriginal = trabajos.slice();
-      const trabajosOrdenados = [...trabajos].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
-      if (JSON.stringify(listaOriginal) !== JSON.stringify(trabajosOrdenados)) {
-        mensajeOrden.style.color = 'green';
-        mensajeOrden.textContent = 'Cambios aplicados correctamente';
-      } else {
-        mensajeOrden.style.color = 'red';
-        mensajeOrden.textContent = 'Error al guardar los cambios';
+    // Crear categoría
+    botonCrearCategoria.addEventListener('click', () => {
+      const nombreCategoria = categoriaInput.value.trim();
+      if (!nombreCategoria) {
+        mensajeCategoria.style.color = 'red';
+        mensajeCategoria.textContent = 'Nombre de categoría vacío';
+        return;
       }
+      if (!categorias[nombreCategoria]) {
+        categorias[nombreCategoria] = [];
+        mensajeCategoria.style.color = 'green';
+        mensajeCategoria.textContent = 'Categoría creada correctamente';
+        actualizarSelectCategorias();
+      } else {
+        mensajeCategoria.style.color = 'red';
+        mensajeCategoria.textContent = 'La categoría ya existe';
+      }
+    });
+
+    // Asignar trabajo a categoría
+    botonAsignarCategoria.addEventListener('click', () => {
+      const trabajoNombre = trabajoACategoríaSelect.value;
+      const categoriaNombre = categoriaAsignadaSelect.value;
+      if (!trabajoNombre || !categoriaNombre) {
+        mensajeAsignación.style.color = 'red';
+        mensajeAsignación.textContent = 'Seleccione trabajo y categoría';
+        return;
+      }
+      if (!categorias[categoriaNombre]) {
+        mensajeAsignación.style.color = 'red';
+        mensajeAsignación.textContent = 'Categoría no encontrada';
+        return;
+      }
+      categorias[categoriaNombre].push(trabajoNombre);
+      mensajeAsignación.style.color = 'green';
+      mensajeAsignación.textContent = `Trabajo "${trabajoNombre}" asignado a "${categoriaNombre}"`;
+    });
+
+    // Mover trabajo entre categorías
+    botonMoverTrabajo.addEventListener('click', () => {
+      const trabajoNombre = trabajoMoverSelect.value;
+      const nuevaCategoria = nuevaCategoriaMoverSelect.value;
+      if (!trabajoNombre || !nuevaCategoria) {
+        mensajeMover.style.color = 'red';
+        mensajeMover.textContent = 'Seleccione trabajo y nueva categoría';
+        return;
+      }
+      if (!categorias[nuevaCategoria]) {
+        mensajeMover.style.color = 'red';
+        mensajeMover.textContent = 'Categoría no válida';
+        return;
+      }
+      for (const categoria in categorias) {
+        const index = categorias[categoria].indexOf(trabajoNombre);
+        if (index !== -1) {
+          categorias[categoria].splice(index, 1);
+        }
+      }
+      categorias[nuevaCategoria].push(trabajoNombre);
+      mensajeMover.style.color = 'green';
+      mensajeMover.textContent = `Trabajo "${trabajoNombre}" movido a "${nuevaCategoria}"`;
     });
   </script>
 </body>
 </html>
+
 
