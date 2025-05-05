@@ -100,3 +100,115 @@ body {
   li:hover {
     background-color: #d6d6d6;
   }
+
+  .gestion-categorias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+    font-size: 14px;
+  }
+
+  .gestion-categorias h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .gestion-categorias label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .gestion-categorias input[type="text"],
+  .gestion-categorias select {
+    width: 100%;
+    max-width: 280px;
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .gestion-categorias button {
+    padding: 8px 12px;
+    background-color: #3399ff;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: fit-content;
+    min-width: 150px;
+    margin-top: 10px;
+  }
+
+  .gestion-categorias button:hover {
+    background-color: #1a8cff;
+  }
+
+  .gestion-categorias p {
+    color: green;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+
+  .seccion-categoria {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* <-- centra horizontalmente */
+    text-align: center;
+  }
+  
+  .seccion-categoria h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .seccion-categoria label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .seccion-categoria input[type="text"],
+  .seccion-categoria select {
+    width: 80%;
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .seccion-categoria button {
+    padding: 8px 12px;
+    background-color: #3399ff;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 80%;
+  }
+  
+  .seccion-categoria button:hover {
+    background-color: #1a8cff;
+  }
+  
+  .seccion-categoria p {
+    color: green;
+    font-weight: bold;
+    margin: 8px 0;
+  }
