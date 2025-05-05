@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Perfil</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Editar Perfil</h1>
+    <div class="profile-pic-container">
+      <img id="profile-pic-preview" src="images/default-avatar.jpg" alt="Foto de perfil">
+    </div>
+    <input type="file" id="profile-pic-input" accept="image/*" />
+    <button id="remove-pic">Eliminar imagen</button>
+
+    <form id="profile-form">
+      <input type="text" id="nombre" placeholder="Nombre" required />
+      <input type="text" id="apellidos" placeholder="Apellidos" required />
+      <input type="text" id="carrera" placeholder="Carrera" required />
+      <input type="text" id="universidad" placeholder="Universidad" required />
+      <input type="text" id="origen" placeholder="Ciudad, Estado, País" required />
+      <textarea id="descripcion" placeholder="Descripción"></textarea>
+      <button type="submit">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <div id="toast">Datos guardados correctamente</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

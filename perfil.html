@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Perfil</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="perfil-card">
+      <div class="profile-pic-container">
+        <img id="profile-pic-display" src="default-avatar.jpg" alt="Foto de perfil">
+      </div>
+      <h2 id="nombre-display">Nombre Apellido</h2>
+      <p id="carrera-display"></p>
+      <p id="universidad-display"></p>
+      <p id="origen-display"></p>
+      <p id="descripcion-display"></p>
+      <button id="edit-button">
+        <img src="edit-icon.png" alt="Editar" href="editar perfil.html"/>
+      </button>
+    </div>
+    <a id="trabajos" href="Editar portafolio.html" class="boton">
+      Añadir trabajos
+    </a>
+  </div>
+
+  <script src="perfil.js"></script>
+</body>
+</html>

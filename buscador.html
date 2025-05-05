@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolios de Diseñadores</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <header>
+    <h1>Explora Portafolios de Diseñadores</h1>
+  </header>
+
+  <main>
+    <section id="buscador">
+      <h2>Buscador</h2>
+      <input type="text" id="input-nombre" placeholder="Buscar por nombre..." />
+      <select id="select-estilo">
+        <option value="">-- Filtrar por estilo --</option>
+        <option value="Minimalista">Minimalista</option>
+        <option value="Retro">Retro</option>
+        <option value="Futurista">Futurista</option>
+      </select>
+      <div id="filtros-categorias"></div>
+    </section>
+
+    <section id="resultados">
+      <!-- Aquí se mostrarán los diseñadores -->
+    </section>
+
+    <section id="categorias">
+      <h2>Administrar Categorías</h2>
+      <input type="text" id="nueva-categoria" placeholder="Nueva categoría" />
+      <button onclick="agregarCategoria()">Agregar</button>
+      <ul id="lista-categorias"></ul>
+    </section>
+  </main>
+
+  <script src="diseniadores.js"></script>
+  <script src="categorias.js"></script>
+  <script src="buscador.js"></script>
+</body>
+</html>
