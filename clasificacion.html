@@ -4,6 +4,130 @@
   <meta charset="UTF-8">
   <title>Sube tus archivos</title>
   <link rel="stylesheet" href="estilos 2.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f4f4f4;
+      padding: 10px 30px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #5cb85c;
+      font-weight: bold;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 10px 30px;
+      display: flex;
+      align-items: center;
+      background: #e0e0e0;
+      border-radius: 25px;
+      padding: 5px 15px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      font-size: 16px;
+    }
+
+    .search-bar i {
+      color: #666;
+      font-size: 18px;
+    }
+
+    nav.menu ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav.menu li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      background-color: #5cb85c;
+      padding: 8px 15px;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    nav.menu li a:hover {
+      background-color: #4cae4c;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-bar {
+        margin: 10px 0;
+      }
+
+      nav.menu ul {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      CREATIVE <span>PORTAFOLIUM</span>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar portafolios...">
+      <i class="fas fa-search"></i>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-house"></i> Inicio</a></li>
+        <li><a href="Crear portafolio.html"><i class="fas fa-plus"></i> Crear</a></li>
+        <li><a href="editar perfil.html"><i class="fas fa-user-edit"></i> Perfil</a></li>
+        <li><a href="buscador.html"><i class="fas fa-magnifying-glass"></i> Buscar</a></li>
+        <li><a href="clasificacion.html"><i class="fas fa-file"></i> Archivos</a></li>
+        <li><a href="enlaces.html"><i class="fas fa-link"></i> Enlaces</a></li>
+      </ul>
+    </nav>
+  </header>
 </head>
 <body>
 <div class="contenedor">
