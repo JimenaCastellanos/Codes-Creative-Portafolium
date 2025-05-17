@@ -3,68 +3,155 @@
 <head>
   <meta charset="UTF-8">
   <title>Creative Portafolium - Inicio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 40px 0;
-      display: flex;
-      justify-content: center;
-    }
-
-    .contenedor {
-      width: 90%;
-      max-width: 600px;
-      background-color: #ffffff;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 30px;
-      font-size: 32px;
-      color: #333;
-    }
-
-    ul {
-      list-style: none;
       padding: 0;
     }
 
-    li {
-      margin: 15px 0;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
     }
 
-    a {
-      display: inline-block;
-      text-decoration: none;
-      background-color: #5cb85c;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 10px;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f4f4f4;
+      padding: 10px 30px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #5cb85c;
+      font-weight: bold;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 10px 30px;
+      display: flex;
+      align-items: center;
+      background: #e0e0e0;
+      border-radius: 25px;
+      padding: 5px 15px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      font-size: 16px;
+    }
+
+    .search-bar i {
+      color: #666;
       font-size: 18px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    a:hover {
-      background-color: #bbbbbb;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    nav.menu ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav.menu li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      background-color: #5cb85c;
+      padding: 8px 15px;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    nav.menu li a:hover {
+      background-color: #4cae4c;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-bar {
+        margin: 10px 0;
+      }
+
+      nav.menu ul {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="contenedor">
-    <h1>Creative Portafolium</h1>
-    <ul>
-        <li><a href="Crear portafolio.html">Crear Portafolio</a></li>
-        <li><a href="editar perfil.html">Editar Perfil</a></li>
-        <li><a href="buscador.html">Buscador</a></li>
-    </ul>
-  </div>
+
+  <header>
+    <div class="logo">
+      CREATIVE <span>PORTAFOLIUM</span>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar portafolios...">
+      <i class="fas fa-search"></i>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-house"></i> Inicio</a></li>
+        <li><a href="crear portafolio.html"><i class="fas fa-plus"></i> Crear</a></li>
+        <li><a href="editar perfil.html"><i class="fas fa-user-edit"></i> Perfil</a></li>
+        <li><a href="buscador.html"><i class="fas fa-magnifying-glass"></i> Buscar</a></li>
+        <li><a href="clasificacion.html"><i class="fas fa-file"></i> Archivos</a></li>
+        <li><a href="enlaces.html"><i class="fas fa-link"></i> Enlaces</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section style="padding: 30px;">
+    <h2>Portafolios Recientes</h2>
+    <div id="listaPortafolios"></div>
+  </section>
+  
+  <script>
+    // Mostrar los portafolios desde localStorage
+    const lista = document.getElementById('listaPortafolios');
+    const portafolios = JSON.parse(localStorage.getItem('portafolios')) || [];
+  
+    if (portafolios.length === 0) {
+      lista.innerHTML = '<p>No hay portafolios creados todavía.</p>';
+    } else {
+      portafolios.forEach(p => {
+        const card = document.createElement('div');
+        card.style.background = '#fff';
+        card.style.border = '1px solid #ddd';
+        card.style.borderRadius = '10px';
+        card.style.padding = '15px';
+        card.style.marginBottom = '15px';
+        card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+        card.innerHTML = `<h3>${p.nombre}</h3><p>${p.descripcion}</p>`;
+        lista.appendChild(card);
+      });
+    }
+  </script>
 </body>
 </html>
