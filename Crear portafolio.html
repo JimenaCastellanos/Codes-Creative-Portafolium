@@ -25,81 +25,74 @@
     <p id="mensaje"></p>
 </div>
 
-  <script>
-    const form = document.getElementById('crearPortafolioForm');
-    const nombreInput = document.getElementById('nombre');
-    const descripcionInput = document.getElementById('descripcion');
-    const nombreError = document.getElementById('nombreError');
-    const descripcionError = document.getElementById('descripcionError');
-    const descripcionContador = document.getElementById('descripcionContador');
-    const mensaje = document.getElementById('mensaje');
+<script>
+  const form = document.getElementById('crearPortafolioForm');
+  const nombreInput = document.getElementById('nombre');
+  const descripcionInput = document.getElementById('descripcion');
+  const nombreError = document.getElementById('nombreError');
+  const descripcionError = document.getElementById('descripcionError');
+  const descripcionContador = document.getElementById('descripcionContador');
+  const mensaje = document.getElementById('mensaje');
 
-    // Actualiza el contador de caracteres en tiempo real
-    descripcionInput.addEventListener('input', () => {
-      const length = descripcionInput.value.length;
-      descripcionContador.textContent = `${length} / 150`;
-      if (length > 150) {
-        descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
-      } else {
-        descripcionError.textContent = '';
-      }
-    });
-
-    // Validación en tiempo real para el nombre
-    nombreInput.addEventListener('input', () => {
-      if (nombreInput.value.trim() === '') {
-        nombreError.textContent = 'El nombre no puede estar vacío.';
-      } else {
-        nombreError.textContent = '';
-      }
-    });
-
-    // Validación al enviar
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const nombre = nombreInput.value.trim();
-      const descripcion = descripcionInput.value.trim();
-
-      let valido = true;
-
-      if (!nombre) {
-        nombreError.textContent = 'El nombre no puede estar vacío.';
-        valido = false;
-      }
-
-      if (descripcion.length > 150) {
-        descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
-        valido = false;
-      }
-
-      if (!valido) {
-        mensaje.style.color = 'red';
-        mensaje.textContent = 'Asegúrese de que los datos han sido llenados correctamente.';
-        return;
-      }
-
-      mensaje.style.color = 'green';
-      mensaje.textContent = '¡Portafolio creado!';
-      form.reset();
-      descripcionContador.textContent = '0 / 150';
-      nombreError.textContent = '';
+  // Actualiza el contador de caracteres en tiempo real
+  descripcionInput.addEventListener('input', () => {
+    const length = descripcionInput.value.length;
+    descripcionContador.textContent = `${length} / 150`;
+    if (length > 150) {
+      descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
+    } else {
       descripcionError.textContent = '';
-    });
+    }
+  });
 
-    // Enviar datos al backend con fetch
-    fetch('/api/portafolios', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, descripcion })
-    })
-    .then(res => res.json())
-    .then(data => {
-      mensaje.style.color = 'green';
-      mensaje.textContent = '¡Portafolio creado en la base de datos!';
-      form.reset();
-      descripcionContador.textContent = '0 / 150';
-    })
-  </script>
+  // Validación en tiempo real para el nombre
+  nombreInput.addEventListener('input', () => {
+    if (nombreInput.value.trim() === '') {
+      nombreError.textContent = 'El nombre no puede estar vacío.';
+    } else {
+      nombreError.textContent = '';
+    }
+  });
+
+  // Validación al enviar
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nombre = nombreInput.value.trim();
+    const descripcion = descripcionInput.value.trim();
+
+    let valido = true;
+
+    if (!nombre) {
+      nombreError.textContent = 'El nombre no puede estar vacío.';
+      valido = false;
+    }
+
+    if (descripcion.length > 150) {
+      descripcionError.textContent = 'Has superado el límite de 150 caracteres.';
+      valido = false;
+    }
+
+    if (!valido) {
+      mensaje.style.color = 'red';
+      mensaje.textContent = 'Asegúrese de que los datos han sido llenados correctamente.';
+      return;
+    }
+
+    // Guardar en localStorage
+    const nuevoPortafolio = { nombre, descripcion };
+    const portafolios = JSON.parse(localStorage.getItem('portafolios')) || [];
+    portafolios.push(nuevoPortafolio);
+    localStorage.setItem('portafolios', JSON.stringify(portafolios));
+
+    mensaje.style.color = 'green';
+    mensaje.textContent = '¡Portafolio creado y guardado!';
+    form.reset();
+    descripcionContador.textContent = '0 / 150';
+    nombreError.textContent = '';
+    descripcionError.textContent = '';
+  });
+</script>
+
 </body>
 </html>
