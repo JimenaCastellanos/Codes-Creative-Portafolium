@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: #f2f2f2;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.contenedor, .formulario {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+input[type="file"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #43a047;
+}
+
+.vista-previa, #previewArea {
+  margin-top: 20px;
+  min-height: 100px;
+  border: 2px dashed #ccc;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fafafa;
+  text-align: center;
+}
+
+hr {
+  margin: 30px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contenedor, .formulario {
+    padding: 20px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
