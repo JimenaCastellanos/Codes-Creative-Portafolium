@@ -1,0 +1,94 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.contenedor {
+  width: 90%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+h2, h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="file"] {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+button {
+  display: block;
+  width: 60%;
+  margin: 0 auto 20px;
+  padding: 12px;
+  background-color: #5cb85c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #449d44;
+}
+
+#misEnlaces a {
+  color: #0066cc;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+#misEnlaces p {
+  margin: 10px 0;
+}
+
+#pdfFolder,
+#videoFolder,
+#imageFolder {
+  margin-bottom: 30px;
+}
+
+embed,
+video,
+img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .contenedor {
+    padding: 25px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="file"] {
+    font-size: 14px;
+  }
+}

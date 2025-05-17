@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sube tus archivos</title>
+  <link rel="stylesheet" href="estilos 2.css" />
+</head>
+<body>
+<div class="contenedor">
+  <h2>Sube tus archivos</h2>
+  <input type="file" id="multiFileInput" multiple />
+
+  <h3>PDFs</h3>
+  <div id="pdfFolder"></div>
+
+  <h3>Videos MP4</h3>
+  <div id="videoFolder"></div>
+
+  <h3>Imágenes</h3>
+  <div id="imageFolder"></div>
+</div>
+  <script>
+    // Añadir archivos sin borrar los anteriores
+    document.getElementById('multiFileInput').addEventListener('change', function (e) {
+      const files = Array.from(e.target.files);
+
+      files.forEach(file => {
+        const url = URL.createObjectURL(file);
+        let element = '';
+
+        if (file.type === 'application/pdf') {
+          element = `<embed src="${url}" type="application/pdf" width="100%" height="300px" />`;
+          document.getElementById('pdfFolder').innerHTML += element;
+        } else if (file.type === 'video/mp4') {
+          element = `<video controls width="100%"><source src="${url}" type="video/mp4"></video>`;
+          document.getElementById('videoFolder').innerHTML += element;
+        } else if (file.type.startsWith('image/')) {
+          element = `<img src="${url}" style="max-width: 100%; height: auto;" />`;
+          document.getElementById('imageFolder').innerHTML += element;
+        }
+      });
+
+      // Limpiar input para permitir volver a subir el mismo archivo si se desea
+      e.target.value = '';
+    });
+  </script>
+
+</body>
+</html>

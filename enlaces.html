@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar Enlaces al Portafolio</title>
+  <link rel="stylesheet" href="estilos 2.css" />
+</head>
+<body>
+<div class="contenedor">
+  <h2>Agrega un enlace a tu portafolio</h2>
+  <input type="text" id="linkText" placeholder="Texto del enlace">
+  <input type="text" id="linkURL" placeholder="https://ejemplo.com">
+  <button onclick="agregarEnlace()">Añadir</button>
+
+  <div id="misEnlaces"></div>
+</div>
+  <script>
+    function agregarEnlace() {
+      const texto = document.getElementById('linkText').value.trim();
+      const url = document.getElementById('linkURL').value.trim();
+
+      if (!texto || !url) {
+        alert("Debes llenar ambos campos.");
+        return;
+      }
+
+      const contenedor = document.getElementById('misEnlaces');
+      const enlace = `<p><a href="${url}" target="_blank">${texto}</a></p>`;
+      contenedor.innerHTML += enlace;
+
+      // Limpiar inputs
+      document.getElementById('linkText').value = '';
+      document.getElementById('linkURL').value = '';
+    }
+  </script>
+
+</body>
+</html>
+
