@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Creative Portafolium</title>
+  <link rel="stylesheet" href="estilo 3.css">
+</head>
+<body>
+  <div class="contenedor">
+    <h1>Creative Portafolium</h1>
+
+    <form id="uploadForm">
+      <label for="imageUpload">Selecciona una imagen:</label><br>
+      <input type="file" id="imageUpload" accept="image/*"><br><br>
+
+      <label for="category">Selecciona una categoría:</label><br>
+      <select id="category">
+        <option value="Diseño Gráfico">Diseño Gráfico</option>
+        <option value="Ilustración Digital">Ilustración Digital</option>
+        <option value="Proyectos Académicos">Proyectos Académicos</option>
+        <option value="Diseño Web">Diseño Web / UI</option>
+        <option value="Multimedia">Multimedia</option>
+      </select><br><br>
+
+      <button type="submit">Subir al Portafolio</button>
+    </form>
+
+    <hr>
+
+    <div id="previewArea"></div>
+  </div>
+
+  <script src="script2.js"></script>
+</body>
+</html>
