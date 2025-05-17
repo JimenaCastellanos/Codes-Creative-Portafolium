@@ -54,6 +54,7 @@
       padding: 8px;
       background: transparent;
       font-size: 16px;
+      width: 120px;
     }
 
     .search-bar i {
@@ -124,6 +125,8 @@
         <li><a href="buscador.html"><i class="fas fa-magnifying-glass"></i> Buscar</a></li>
         <li><a href="clasificacion.html"><i class="fas fa-file"></i> Archivos</a></li>
         <li><a href="enlaces.html"><i class="fas fa-link"></i> Enlaces</a></li>
+        <li><a href="Subir imagen.html"><i class="fas fa-file"></i> Subir imagen</a></li>
+        <li><a href="Asignar imagen.html"><i class="fas fa-file"></i> Asignar categorias</a></li>
       </ul>
     </nav>
   </header>
@@ -133,25 +136,25 @@
   </section>
   
   <script>
-  // Mostrar los portafolios desde localStorage
-  const lista = document.getElementById('listaPortafolios');
-  const portafolios = JSON.parse(localStorage.getItem('portafolios')) || [];
-
-  if (portafolios.length === 0) {
-    lista.innerHTML = '<p>No hay portafolios creados todavía.</p>';
-  } else {
-    portafolios.forEach(p => {
-      const card = document.createElement('div');
-      card.style.background = '#fff';
-      card.style.border = '1px solid #ddd';
-      card.style.borderRadius = '10px';
-      card.style.padding = '15px';
-      card.style.marginBottom = '15px';
-      card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
-      card.innerHTML = `<h3>${p.nombre}</h3><p>${p.descripcion}</p>`;
-      lista.appendChild(card);
-    });
-  }
-</script>
+    // Mostrar los portafolios desde localStorage
+    const lista = document.getElementById('listaPortafolios');
+    const portafolios = JSON.parse(localStorage.getItem('portafolios')) || [];
+  
+    if (portafolios.length === 0) {
+      lista.innerHTML = '<p>No hay portafolios creados todavía.</p>';
+    } else {
+      portafolios.forEach(p => {
+        const card = document.createElement('div');
+        card.style.background = '#fff';
+        card.style.border = '1px solid #ddd';
+        card.style.borderRadius = '10px';
+        card.style.padding = '15px';
+        card.style.marginBottom = '15px';
+        card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+        card.innerHTML = `<h3>${p.nombre}</h3><p>${p.descripcion}</p>`;
+        lista.appendChild(card);
+      });
+    }
+  </script>
 </body>
 </html>
